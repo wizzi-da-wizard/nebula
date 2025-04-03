@@ -8,7 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
-        
+
+        :root {
+            --button-color: white; /* Default button color */
+            --border-color: white; /* Default border color */
+            --input-bg-color: black; /* Default background color for input */
+            --input-text-color: white; /* Default text color for input */
+            --placeholder-color: white; /* Default placeholder color */
+            --text-color: white; /* Default text color throughout the site */
+        }
+
         body {
             font-family: 'Source Code Pro', monospace;
             margin: 0;
@@ -17,79 +26,142 @@
             flex-direction: column;
             height: 100vh;
             background-color: black;
+            color: var(--text-color); /* Use variable for text color */
         }
+
         .browser-bar {
             background-color: black;
             padding: 10px;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            position: relative;
-            transition: opacity 0.3s ease-in-out;
         }
+
         .control-buttons {
             display: flex;
             margin-right: 10px;
         }
-        .control-buttons button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid white;
+
+        .control-buttons button,
+        .browser-bar button {
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid var(--border-color);
             background-color: black;
-            color: white;
+            color: var(--button-color);
             cursor: pointer;
             transition: all 0.2s ease-in-out;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
+            margin-left: 10px;
         }
-        .control-buttons button:hover {
-            background-color: white;
+
+        .control-buttons button:hover,
+        .browser-bar button:hover {
+            background-color: var(--button-color);
             color: black;
             transform: scale(1.1);
         }
+
         #urlInput {
             flex: 1;
             padding: 10px;
             font-size: 16px;
             border-radius: 25px;
-            border: 2px solid white;
-            background-color: black;
-            color: white;
+            border: 2px solid var(--border-color);
+            background-color: var(--input-bg-color);
+            color: var(--input-text-color);
             outline: none;
         }
+
         #urlInput::placeholder {
-            color: white;
+            color: var(--placeholder-color);
         }
-        .browser-bar button {
+
+        .settings-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 100;
+            width: 600px; /* Increased width */
+            height: 400px; /* Increased height */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: red;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        /* Style the dropdown button to look like others */
+        .dropdown button {
             padding: 10px 16px;
             font-size: 16px;
             border-radius: 25px;
-            border: 2px solid white;
+            border: 2px solid var(--border-color);
             background-color: black;
-            color: white;
+            color: var(--button-color);
             cursor: pointer;
             transition: all 0.2s ease-in-out;
-            margin-left: 10px;
         }
-        .browser-bar button:hover {
-            background-color: white;
-            color: black;
-            transform: scale(1.1);
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: black; /* Dropdown background */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
         }
+
+        .dropdown-content div {
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            color: white; /* Text color in dropdown */
+            cursor: pointer;
+        }
+
+        .dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         .browser-content {
             flex: 1;
             position: relative;
             background: url('https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BYhbSjKDtkvty6l0n/videoblocks-6567bc560e26b47183b158f4_rzfzr7ds6_thumbnail-1080_07.png') center/cover no-repeat;
         }
+
         .browser-content iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
+
         .welcome-message {
             position: absolute;
             top: 50%;
@@ -97,98 +169,65 @@
             transform: translate(-50%, -50%);
             font-size: 96px;
             font-weight: bold;
-            font-family: 'Source Code Pro', monospace;
-            color: white;
             text-shadow: 0 0 20px white;
             text-align: center;
-        }
-        .fullscreen-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: black;
-            color: white;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 2px solid white;
-            transition: all 0.2s ease-in-out;
-            margin-left: 8px;
-        }
-        .fullscreen-button:hover {
-            background-color: white;
-            color: black;
-            transform: scale(1.1);
-        }
-        .hidden {
-            opacity: 0;
-            pointer-events: none;
+            z-index: 10; /* Ensure it is above other elements */
         }
 
-        .history-sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100%;
+        .history-bar, .how-to-use-box, .version-popup {
             background-color: black;
             color: white;
-            box-shadow: -2px 0 5px rgba(255, 255, 255, 0.5);
-            padding: 20px;
-            overflow-y: auto;
             display: none; /* Initially hidden */
-        }
-        .history-sidebar.show {
-            display: block; /* Show when the "show" class is added */
-            right: 0;
-        }
-        .history-sidebar button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .history-list a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            margin: 5px 0;
-        }
-        .how-to-use-box {
-            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
             padding: 20px;
-            border-radius: 10px;
-            z-index: 100;
+            border-radius: 15px;
+            z-index: 101;
             max-width: 80%;
+            width: 400px;
             text-align: center;
         }
-        .how-to-use-box button {
+
+        /* Bottom History Bar */
+        .bottom-history-bar {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: white;
-            color: black;
-            border: none;
-            font-size: 16px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            align-items: center;
+            z-index: 110;
+        }
+
+        .history-list {
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-item {
+            padding: 10px;
+            color: white;
+            text-align: left;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body>
+
     <div class="browser-bar" id="browserBar">
         <div class="control-buttons">
             <button onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
@@ -201,115 +240,167 @@
         <input type="text" id="urlInput" placeholder="Enter URL" onkeydown="checkEnter(event)">
         <button onclick="toggleHistory()">History</button>
         <button onclick="toggleSettings()">Settings</button>
+        <button onclick="showHowToUse()">How to Use</button>
+        <button onclick="showNewsPopup()">News</button> <!-- Renamed to "News" -->
         <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
-        <button onclick="toggleHowToUse()">How to Use</button>
-        <button onclick="window.open('https://cash.app/$Ot1m1', '_blank')">CashApp</button>
-
+        <button onclick="window.open('https://cash.app/$Ot1m1')">Cash App</button>
     </div>
+
     <div class="browser-content">
         <iframe id="browserFrame" src="about:blank"></iframe>
         <div id="welcomeMessage" class="welcome-message">Welcome To Nebula</div>
     </div>
-
-    <div class="history-sidebar" id="historySidebar">
-        <button onclick="toggleHistory()">X</button>
-        <h2>History</h2>
+    
+    <!-- BOTTOM HISTORY BAR -->
+    <div class="bottom-history-bar" id="bottomHistoryBar">
+        <button class="close-btn" onclick="closeBottomHistoryBar()">X</button>
         <div class="history-list" id="historyList"></div>
     </div>
 
+    <!-- SETTINGS MENU -->
+    <div class="settings-menu" id="settingsMenu">
+        <button class="close-btn" onclick="toggleSettings()">X</button>
+        <h2>Settings</h2>
+        <div class="dropdown">
+            <button>Themes</button>
+            <div class="dropdown-content" id="themeDropdown">
+                <div style="color: red;" onclick="changeTheme('red')">Red</div>
+                <div style="color: orange;" onclick="changeTheme('orange')">Orange</div>
+                <div style="color: yellow;" onclick="changeTheme('yellow')">Yellow</div>
+                <div style="color: green;" onclick="changeTheme('green')">Green</div>
+                <div style="color: blue;" onclick="changeTheme('blue')">Blue</div>
+                <div style="color: purple;" onclick="changeTheme('purple')">Purple</div>
+                <div style="color: white;" onclick="changeTheme('default')">Default</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW TO USE POPUP -->
     <div class="how-to-use-box" id="howToUseBox">
-        <button onclick="closeHowToUse()">X</button>
-        <p>Make sure the URL you put in is an actual URL. This ain't Google. It will only unblock if the site is blocked by GoGuardian, not ContentKeeper. ContentKeeper-blocked sites are impossible to unblock without a proxy.</p>
+        <button class="close-btn" onclick="closeHowToUse()">X</button>
+        <h2>How To Use</h2>
+        <p>Make sure the URL you put in is an actual URL. This isn't Google. It will only unblock if the site is blocked by GoGuardian, not ContentKeeper. ContentKeeper-blocked sites are impossible to unblock without a proxy.</p>
+    </div>
+
+    <!-- NEWS POPUP -->
+    <div class="version-popup" id="newsPopup">
+        <button class="close-btn" onclick="closeNewsPopup()">X</button>
+        <h2>News</h2>
+        <p>- Version 1.3 now out!</p>
+        <p>- Added themes (in the settings menu).</p>
+        <p>- Made a Github link (https://wizzi-da-wizard.github.io/nebula/nebula.html).</p>
+        <p>- Moved history bar to the bottom of the screen.</p>
+        <p>- Added Cash App link (please donate im doing this all for free).</p>
     </div>
 
     <script>
-        let historyList = [];
+        let historyListArray = []; // Array to keep track of history
 
-        function loadURL() {
-            var urlInput = document.getElementById('urlInput');
-            var browserFrame = document.getElementById('browserFrame');
-            var welcomeMessage = document.getElementById('welcomeMessage');
-            var url = urlInput.value.trim();
-            if (!/^https?:\/\//i.test(url)) {
-                url = 'http://' + url;
+        function addToHistory(url) {
+            if (!historyListArray.includes(url)) {
+                historyListArray.push(url);
+                updateHistoryList();
             }
-            browserFrame.src = url;
-            if (welcomeMessage) {
-                welcomeMessage.style.display = 'none';
-            }
-            saveHistory(url);
         }
 
-        function saveHistory(url) {
-            let date = new Date().toLocaleString();
-            historyList.push({ url, date });
-            updateHistorySidebar();
-        }
-
-        function updateHistorySidebar() {
-            let historyContainer = document.getElementById('historyList');
-            historyContainer.innerHTML = '';
-            historyList.forEach(entry => {
-                let link = document.createElement('a');
-                link.href = '#';
-                link.textContent = `${entry.date} - ${entry.url}`;
-                link.onclick = function() {
-                    document.getElementById('browserFrame').src = entry.url;
-                };
-                historyContainer.appendChild(link);
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = ''; // Clear existing items
+            historyListArray.forEach(url => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.textContent = url;
+                item.onclick = () => loadURL(url); // Load URL on click
+                historyList.appendChild(item);
             });
         }
 
         function toggleHistory() {
-            let sidebar = document.getElementById('historySidebar');
-            sidebar.classList.toggle('show');
+            const bottomHistoryBar = document.getElementById('bottomHistoryBar');
+            bottomHistoryBar.style.display = bottomHistoryBar.style.display === 'block' ? 'none' : 'block';
+            updateHistoryList(); // Ensure history is updated when opened
         }
 
-        function toggleHowToUse() {
-            var howToUseBox = document.getElementById('howToUseBox');
-            howToUseBox.style.display = 'block';
+        function closeBottomHistoryBar() {
+            document.getElementById('bottomHistoryBar').style.display = 'none';
         }
 
-        function closeHowToUse() {
-            var howToUseBox = document.getElementById('howToUseBox');
-            howToUseBox.style.display = 'none';
-        }
-
-        function goBack() {
-            window.history.back();
-        }
-
-        function goForward() {
-            window.history.forward();
-        }
-
-        function reloadPage() {
-            location.reload();
+        function loadURL(url) {
+            document.getElementById('browserFrame').src = url; // Load URL in iframe
+            document.getElementById('welcomeMessage').style.display = 'none'; // Hide welcome message
+            addToHistory(url); // Add loaded URL to history
         }
 
         function checkEnter(event) {
             if (event.key === 'Enter') {
-                loadURL();
+                const url = document.getElementById('urlInput').value;
+                loadURL(url); // Load URL on Enter
+                document.getElementById('urlInput').value = ''; // Clear input
             }
+        }
+
+        function goBack() {
+            document.getElementById('browserFrame').contentWindow.history.back();
+        }
+
+        function goForward() {
+            document.getElementById('browserFrame').contentWindow.history.forward();
+        }
+
+        function reloadPage() {
+            document.getElementById('browserFrame').contentWindow.location.reload();
         }
 
         function toggleFullscreen() {
-            let browserBar = document.getElementById('browserBar');
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-                browserBar.classList.add('hidden');
-            } else {
-                document.exitFullscreen();
-                browserBar.classList.remove('hidden');
+            const elem = document.getElementById('browserFrame');
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
             }
         }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && document.fullscreenElement) {
-                document.exitFullscreen();
-                document.getElementById('browserBar').classList.remove('hidden');
+        function toggleSettings() {
+            const settingsMenu = document.getElementById('settingsMenu');
+            settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showHowToUse() {
+            document.getElementById('howToUseBox').style.display = 'block';
+        }
+
+        function closeHowToUse() {
+            document.getElementById('howToUseBox').style.display = 'none';
+        }
+
+        function showNewsPopup() {
+            document.getElementById('newsPopup').style.display = 'block';
+        }
+
+        function closeNewsPopup() {
+            document.getElementById('newsPopup').style.display = 'none';
+        }
+
+        function changeTheme(color) {
+            if (color === 'default') {
+                document.documentElement.style.setProperty('--text-color', 'white');
+                document.documentElement.style.setProperty('--button-color', 'white');
+                document.documentElement.style.setProperty('--border-color', 'white');
+                document.documentElement.style.setProperty('--input-bg-color', 'black');
+                document.documentElement.style.setProperty('--input-text-color', 'white');
+                document.documentElement.style.setProperty('--placeholder-color', 'white');
+            } else {
+                document.documentElement.style.setProperty('--text-color', color);
+                document.documentElement.style.setProperty('--button-color', color);
+                document.documentElement.style.setProperty('--border-color', color);
+                document.documentElement.style.setProperty('--input-bg-color', 'black');
+                document.documentElement.style.setProperty('--input-text-color', 'white');
+                document.documentElement.style.setProperty('--placeholder-color', 'white');
             }
-        });
+        }
     </script>
 </body>
 </html>
+```
