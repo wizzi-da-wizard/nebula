@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nebula</title>
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
@@ -228,9 +224,32 @@
         .history-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        /* Visitor stats box */
+        .visitor-stats {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .visitor-stats.hidden {
+            display: none; /* Hide the stats box */
+        }
     </style>
 </head>
 <body>
+
+    <div class="visitor-stats" id="visitorStats">
+        <span>Total Visitors: <span id="totalVisitors">0</span></span>
+        <span>Online Now: <span id="onlineUsers">0</span></span>
+        <span>Visited Today: <span id="todaysVisitors">0</span></span>
+    </div>
 
     <div class="browser-bar" id="browserBar">
         <div class="control-buttons">
@@ -245,9 +264,9 @@
         <button onclick="toggleHistory()">History</button>
         <button onclick="toggleSettings()">Settings</button>
         <button onclick="showHowToUse()">How to Use</button>
-        <button onclick="showNewsPopup()">News</button> <!-- Renamed to "News" -->
+        <button onclick="showNewsPopup()">News</button>
         <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
-        <button onclick="window.open('https://cash.app/$Ot1m1')">Cash App</button>
+        <button onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
     </div>
 
     <div class="browser-content">
@@ -294,16 +313,34 @@
         <p>- Added themes (in the settings menu).</p>
         <p>- Made a Github link (https://wizzi-da-wizard.github.io/nebula/nebula.html).</p>
         <p>- Moved history bar to the bottom of the screen.</p>
-        <p>- Added Cash App link (please donate im doing this all for free).</p>
+        <p>- Added Cash App link (please donate I'm doing this all for free).</p>
     </div>
 
     <script>
         let historyListArray = []; // Array to keep track of history
+        let totalVisitors = 0;
+        let onlineUsers = 0;
+        let todaysVisitors = 0;
+
+        function updateVisitorStats() {
+            document.getElementById("totalVisitors").innerText = totalVisitors;
+            document.getElementById("onlineUsers").innerText = onlineUsers;
+            document.getElementById("todaysVisitors").innerText = todaysVisitors;
+
+            const statsBox = document.getElementById("visitorStats");
+            statsBox.classList.remove('hidden'); // Show the stats box
+        }
+
+        function hideVisitorStats() {
+            const statsBox = document.getElementById("visitorStats");
+            statsBox.classList.add('hidden'); // Hide the stats box
+        }
 
         function addToHistory(url) {
             if (!historyListArray.includes(url)) {
                 historyListArray.push(url);
                 updateHistoryList();
+                hideVisitorStats(); // Hide stats when a URL is searched
             }
         }
 
@@ -333,6 +370,7 @@
             document.getElementById('browserFrame').src = url; // Load URL in iframe
             document.getElementById('welcomeMessage').style.display = 'none'; // Hide welcome message
             addToHistory(url); // Add loaded URL to history
+            hideVisitorStats(); // Hide stats when a URL is searched
         }
 
         function checkEnter(event) {
@@ -404,7 +442,18 @@
                 document.documentElement.style.setProperty('--placeholder-color', 'white');
             }
         }
+
+        // Initialize visitor stats
+        totalVisitors = 100; // Example number
+        onlineUsers = 10; // Example number
+        todaysVisitors = 20; // Example number
+
+        // Update stats on page load
+        window.onload = function() {
+            updateVisitorStats();
+            showNewsPopup(); // Show the news popup on load
+        };
     </script>
 </body>
 </html>
-```
+created by Wizzi
