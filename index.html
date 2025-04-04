@@ -91,6 +91,24 @@
             width: 600px; /* Increased width */
             height: 400px; /* Increased height */
         }
+        .settings-menu button {
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid var(--border-color);
+            background-color: black;
+            color: var(--button-color);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin-top: 20px;
+        }
+        
+        .settings-menu button:hover {
+            background-color: var(--button-color);
+            color: black;
+            transform: scale(1.1);
+        }
+
 
         .close-btn {
             position: absolute;
@@ -239,7 +257,9 @@
         }
 
         .visitor-stats.hidden {
-            display: none; /* Hide the stats box */
+    display: none; /* Correctly hide the stats box */
+}
+
         }
     </style>
 </head>
@@ -296,6 +316,10 @@
                 <div style="color: white;" onclick="changeTheme('default')">Default</div>
             </div>
         </div>
+        <button class="settings-button" onclick="openInNewTab()">Open in about:blank</button>
+
+
+
     </div>
 
     <!-- HOW TO USE POPUP -->
@@ -309,8 +333,9 @@
     <div class="version-popup" id="newsPopup">
         <button class="close-btn" onclick="closeNewsPopup()">X</button>
         <h2>News</h2>
-        <p>- Version 1.3 now out!</p>
+        <p>- Version 1.3.3 now out!</p>
         <p>- Added themes (in the settings menu).</p>
+        <p>- Added about:blank cloaking (in the settings menu).</p>
         <p>- Made a Github link (https://wizzi-da-wizard.github.io/nebula/nebula.html).</p>
         <p>- Moved history bar to the bottom of the screen.</p>
         <p>- Added Cash App link (please donate I'm doing this all for free).</p>
@@ -442,6 +467,13 @@
                 document.documentElement.style.setProperty('--placeholder-color', 'white');
             }
         }
+        function openInNewTab() {
+        const htmlContent = document.documentElement.outerHTML;
+        const newWindow = window.open('about:blank', '_blank');
+        newWindow.document.write(htmlContent);
+        newWindow.document.close();
+    }
+
 
         // Initialize visitor stats
         totalVisitors = 100; // Example number
