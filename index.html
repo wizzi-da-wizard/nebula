@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+created by Wizzi
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,11 +36,70 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
+            order: 2;
         }
 
         .control-buttons {
             display: flex;
             margin-right: 10px;
+        }
+
+        .more-options-button {
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid var(--border-color);
+            background-color: black;
+            color: var(--button-color);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin-left: 10px;
+        }
+
+        .more-options-button:hover {
+            background-color: var(--button-color);
+            color: black;
+            transform: scale(1.1);
+        }
+
+        .more-options-dropdown {
+            display: none;
+            position: absolute;
+            background-color: black;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            padding: 10px;
+            right: 10px;
+            top: 50px;
+        }
+
+        .more-options-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 5px 16px;
+            font-size: 16px;
+            border-radius: 2px;
+            border: none;
+            background-color: black;
+            color: var(--button-color);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .more-options-dropdown button:hover {
+            background-color: var(--button-color);
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .more-options-container {
+            position: relative;
+            display: inline-block;
         }
 
         .control-buttons button,
@@ -94,7 +154,7 @@
         .settings-menu button {
             padding: 10px 16px;
             font-size: 16px;
-            border-radius: 25px;
+            border-radius: 2px;
             border: 2px solid var(--border-color);
             background-color: black;
             color: var(--button-color);
@@ -128,7 +188,7 @@
         .dropdown {
             position: relative;
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 2px;
         }
 
         /* Style the dropdown button to look like others */
@@ -149,11 +209,11 @@
             background-color: black; /* Dropdown background */
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+            z-index: 10;
         }
 
         .dropdown-content div {
-            padding: 12px 16px;
+            padding: 5px 10px;
             text-decoration: none;
             display: block;
             color: white; /* Text color in dropdown */
@@ -172,12 +232,99 @@
             flex: 1;
             position: relative;
             background: url('https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BYhbSjKDtkvty6l0n/videoblocks-6567bc560e26b47183b158f4_rzfzr7ds6_thumbnail-1080_07.png') center/cover no-repeat;
+            order: 3; /* Move below both bars */
+        }
+
+        .tabs-container {
+            display: flex;
+            background-color: black;
+            padding: 5px 5px 6px 5px;
+            overflow-x: auto;
+            white-space: nowrap;
+            order: 1;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-right: 50px; /* Make space for new tab button */
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            margin-right: 5px;
+            background-color: black;
+            color: var(--button-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            min-width: 80px;
+            max-width: 180px;
+            height: 28px;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background-color: var(--button-color);
+            color: black;
+            border-radius: 8px;
+        }
+
+        .tab-title {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 20px;
+        }
+
+        .close-tab {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 0 5px;
+            font-size: 12px;
+        }
+
+        .close-tab:hover {
+            color: red;
+        }
+
+        .new-tab-button {
+            padding: 6px 12px;
+            background-color: black;
+            color: var(--button-color);
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+
+        .new-tab-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .browser-content iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: none;
+        }
+
+        .browser-content iframe.active {
+            display: block;
         }
 
         .welcome-message {
@@ -187,9 +334,39 @@
             transform: translate(-50%, -50%);
             font-size: 96px;
             font-weight: bold;
-            text-shadow: 0 0 20px white;
+            text-shadow: 0 0 20px black;
             text-align: center;
-            z-index: 10; /* Ensure it is above other elements */
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 0 0 20px black;
+            text-align: center;
+            z-index: 10;
+            display: none;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            animation: loadingDots 1.5s infinite;
+        }
+
+        @keyframes loadingDots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .loading-dots::after {
+            content: '...';
+            animation: loadingDots 1.5s infinite;
         }
 
         .history-bar, .how-to-use-box, .version-popup {
@@ -243,33 +420,12 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* Visitor stats box */
-        .visitor-stats {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .visitor-stats.hidden {
-    display: none; /* Correctly hide the stats box */
-}
-
         }
     </style>
 </head>
 <body>
+  
 
-    <div class="visitor-stats" id="visitorStats">
-        <span>Total Visitors: <span id="totalVisitors">0</span></span>
-        <span>Online Now: <span id="onlineUsers">0</span></span>
-        <span>Visited Today: <span id="todaysVisitors">0</span></span>
-    </div>
 
     <div class="browser-bar" id="browserBar">
         <div class="control-buttons">
@@ -281,17 +437,31 @@
             </button>
         </div>
         <input type="text" id="urlInput" placeholder="Enter URL" onkeydown="checkEnter(event)">
+        <div class="more-options-container">
+            <button class="more-options-button" onclick="toggleMoreOptions()">⋮</button>
+            <div class="more-options-dropdown" id="moreOptionsDropdown">
         <button onclick="toggleHistory()">History</button>
         <button onclick="toggleSettings()">Settings</button>
         <button onclick="showHowToUse()">How to Use</button>
         <button onclick="showNewsPopup()">News</button>
         <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
         <button onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-container" id="tabsContainer">
+        <div class="tab active" data-tab-id="0">
+            <span class="tab-title">New Tab</span>
+            <button class="close-tab" onclick="closeTab(event, 0)">×</button>
+        </div>
+        <button class="new-tab-button" onclick="addNewTab()">+</button>
     </div>
 
     <div class="browser-content">
-        <iframe id="browserFrame" src="about:blank"></iframe>
-        <div id="welcomeMessage" class="welcome-message">Welcome To Nebula</div>
+        <iframe id="browserFrame0" class="active" src="about:blank"></iframe>
+        <div id="welcomeMessage" class="welcome-message">Welc𝚘me T𝚘 Nebula</div>
+        <div id="loadingMessage" class="loading-message">Loading<span class="loading-dots"></span></div>
     </div>
     
     <!-- BOTTOM HISTORY BAR -->
@@ -305,16 +475,23 @@
         <button class="close-btn" onclick="toggleSettings()">X</button>
         <h2>Settings</h2>
         <div class="dropdown">
-            <button>Themes</button>
+            <button>The𝚖es</button>
             <div class="dropdown-content" id="themeDropdown">
+                <div style="color: white;" onclick="changeTheme('default')">Default</div>
                 <div style="color: red;" onclick="changeTheme('red')">Red</div>
                 <div style="color: orange;" onclick="changeTheme('orange')">Orange</div>
                 <div style="color: yellow;" onclick="changeTheme('yellow')">Yellow</div>
                 <div style="color: green;" onclick="changeTheme('green')">Green</div>
                 <div style="color: blue;" onclick="changeTheme('blue')">Blue</div>
                 <div style="color: purple;" onclick="changeTheme('purple')">Purple</div>
-                <div style="color: white;" onclick="changeTheme('default')">Default</div>
-            </div>
+                <div style="color: cyan;" onclick="changeTheme('cyan')">Cyan</div>
+                <div style="color: pink;" onclick="changeTheme('pink')">Pink</div>
+                <div style="color: indigo;" onclick="changeTheme('indigo')">Indigo</div>
+                <div style="color: magenta;" onclick="changeTheme('magenta')">Magenta</div>
+                <div style="color: teal;" onclick="changeTheme('teal')">Teal</div>
+
+
+            }
         </div>
         <button class="settings-button" onclick="openInNewTab()">Open in about:blank</button>
 
@@ -333,12 +510,8 @@
     <div class="version-popup" id="newsPopup">
         <button class="close-btn" onclick="closeNewsPopup()">X</button>
         <h2>News</h2>
-        <p>- Version 1.3.3 now out!</p>
-        <p>- Added themes (in the settings menu).</p>
-        <p>- Added about:blank cloaking (in the settings menu).</p>
-        <p>- Made a Github link (https://wizzi-da-wizard.github.io/nebula/nebula.html).</p>
-        <p>- Moved history bar to the bottom of the screen.</p>
-        <p>- Added Cash App link (please donate I'm doing this all for free).</p>
+        <p>- Version 1.3.4 now out!</p>
+        <p>- Added more themes</p>
     </div>
 
     <script>
@@ -346,6 +519,7 @@
         let totalVisitors = 0;
         let onlineUsers = 0;
         let todaysVisitors = 0;
+        let tabCounter = 1; // Counter for new tab IDs
 
         function updateVisitorStats() {
             document.getElementById("totalVisitors").innerText = totalVisitors;
@@ -384,18 +558,51 @@
         function toggleHistory() {
             const bottomHistoryBar = document.getElementById('bottomHistoryBar');
             bottomHistoryBar.style.display = bottomHistoryBar.style.display === 'block' ? 'none' : 'block';
-            updateHistoryList(); // Ensure history is updated when opened
+            document.getElementById('moreOptionsDropdown').style.display = 'none';
+            updateHistoryList();
+            return false; // Prevent event propagation
         }
 
         function closeBottomHistoryBar() {
             document.getElementById('bottomHistoryBar').style.display = 'none';
         }
 
+        function updateTabTitle(iframe, tab) {
+            try {
+                const title = iframe.contentDocument.title;
+                if (title && title !== '') {
+                    tab.querySelector('.tab-title').textContent = title;
+                } else {
+                    tab.querySelector('.tab-title').textContent = iframe.src;
+                }
+            } catch (e) {
+                // Cross-origin error, use URL instead
+                tab.querySelector('.tab-title').textContent = iframe.src;
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('loadingMessage').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingMessage').style.display = 'none';
+        }
+
         function loadURL(url) {
-            document.getElementById('browserFrame').src = url; // Load URL in iframe
-            document.getElementById('welcomeMessage').style.display = 'none'; // Hide welcome message
-            addToHistory(url); // Add loaded URL to history
-            hideVisitorStats(); // Hide stats when a URL is searched
+            const activeTab = document.querySelector('.tab.active');
+            const tabId = activeTab.getAttribute('data-tab-id');
+            const iframe = document.getElementById(`browserFrame${tabId}`);
+            
+            showLoading();
+            iframe.src = url;
+            iframe.onload = () => {
+                updateTabTitle(iframe, activeTab);
+                hideLoading();
+            };
+            addToHistory(url);
+            hideVisitorStats();
         }
 
         function checkEnter(event) {
@@ -407,15 +614,18 @@
         }
 
         function goBack() {
-            document.getElementById('browserFrame').contentWindow.history.back();
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            activeIframe.contentWindow.history.back();
         }
 
         function goForward() {
-            document.getElementById('browserFrame').contentWindow.history.forward();
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            activeIframe.contentWindow.history.forward();
         }
 
         function reloadPage() {
-            document.getElementById('browserFrame').contentWindow.location.reload();
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            activeIframe.contentWindow.location.reload();
         }
 
         function toggleFullscreen() {
@@ -432,22 +642,32 @@
         function toggleSettings() {
             const settingsMenu = document.getElementById('settingsMenu');
             settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('moreOptionsDropdown').style.display = 'none';
+            return false; // Prevent event propagation
         }
 
         function showHowToUse() {
-            document.getElementById('howToUseBox').style.display = 'block';
+            const howToUseBox = document.getElementById('howToUseBox');
+            howToUseBox.style.display = 'block';
+            document.getElementById('moreOptionsDropdown').style.display = 'none';
+            return false; // Prevent event propagation
         }
 
         function closeHowToUse() {
             document.getElementById('howToUseBox').style.display = 'none';
+            return false; // Prevent event propagation
         }
 
         function showNewsPopup() {
-            document.getElementById('newsPopup').style.display = 'block';
+            const newsPopup = document.getElementById('newsPopup');
+            newsPopup.style.display = 'block';
+            document.getElementById('moreOptionsDropdown').style.display = 'none';
+            return false; // Prevent event propagation
         }
 
         function closeNewsPopup() {
             document.getElementById('newsPopup').style.display = 'none';
+            return false; // Prevent event propagation
         }
 
         function changeTheme(color) {
@@ -482,10 +702,105 @@
 
         // Update stats on page load
         window.onload = function() {
+            document.getElementById('howToUseBox').style.display = 'none';
+            document.getElementById('newsPopup').style.display = 'none';
+            document.getElementById('settingsMenu').style.display = 'none';
+            document.getElementById('bottomHistoryBar').style.display = 'none';
             updateVisitorStats();
-            showNewsPopup(); // Show the news popup on load
         };
+
+        function addNewTab() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const newTabId = tabCounter++;
+            
+            // Create new tab element
+            const newTab = document.createElement('div');
+            newTab.className = 'tab';
+            newTab.setAttribute('data-tab-id', newTabId);
+            newTab.innerHTML = `
+                <span class="tab-title">New Tab</span>
+                <button class="close-tab" onclick="closeTab(event, ${newTabId})">×</button>
+            `;
+            
+            // Create new iframe
+            const newIframe = document.createElement('iframe');
+            newIframe.id = `browserFrame${newTabId}`;
+            newIframe.src = 'about:blank';
+            newIframe.onload = () => updateTabTitle(newIframe, newTab);
+            document.querySelector('.browser-content').appendChild(newIframe);
+            
+            // Add click handler for the new tab
+            newTab.onclick = () => switchTab(newTabId);
+            
+            // Insert new tab before the "+" button
+            tabsContainer.insertBefore(newTab, tabsContainer.lastChild);
+            
+            // Switch to the new tab
+            switchTab(newTabId);
+        }
+
+        function switchTab(tabId) {
+            // Update active states
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.browser-content iframe').forEach(iframe => {
+                iframe.classList.remove('active');
+            });
+            
+            // Activate selected tab and iframe
+            const selectedTab = document.querySelector(`.tab[data-tab-id="${tabId}"]`);
+            const selectedIframe = document.getElementById(`browserFrame${tabId}`);
+            
+            if (selectedTab && selectedIframe) {
+                selectedTab.classList.add('active');
+                selectedIframe.classList.add('active');
+                
+                // Update URL input with current tab's URL
+                document.getElementById('urlInput').value = selectedIframe.src;
+            }
+        }
+
+        function closeTab(event, tabId) {
+            event.stopPropagation(); // Prevent tab switch when clicking close button
+            
+            const tab = document.querySelector(`.tab[data-tab-id="${tabId}"]`);
+            const iframe = document.getElementById(`browserFrame${tabId}`);
+            
+            // Don't close if it's the last tab
+            if (document.querySelectorAll('.tab').length <= 1) return;
+            
+            // Remove tab and iframe
+            tab.remove();
+            iframe.remove();
+            
+            // Switch to the previous tab
+            const remainingTabs = document.querySelectorAll('.tab');
+            if (remainingTabs.length > 0) {
+                const lastTab = remainingTabs[remainingTabs.length - 1];
+                switchTab(parseInt(lastTab.getAttribute('data-tab-id')));
+            }
+        }
+
+        // Initialize first tab
+        document.querySelector('.tab').onclick = () => switchTab(0);
+
+        function toggleMoreOptions() {
+            const dropdown = document.getElementById('moreOptionsDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('moreOptionsDropdown');
+            const moreOptionsButton = document.querySelector('.more-options-button');
+            
+            if (!moreOptionsButton.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
     </script>
+    
 </body>
 </html>
-created by Wizzi
+<a href="//www.dmca.com/Protection/Status.aspx?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-11.png?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
