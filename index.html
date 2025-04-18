@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="74b70intcnVhR7lQZXSavhGR-DMnvuIryTM_B3ADBWE" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nebula</title>
@@ -54,6 +53,9 @@
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             margin-left: 10px;
+            outline: none;
+            writing-mode: horizontal-tb;
+            text-orientation: mixed;
         }
 
         .more-options-button:hover {
@@ -79,9 +81,9 @@
         .more-options-dropdown button {
             display: block;
             width: 100%;
-            padding: 5px 16px;
+            padding: 10px 16px;
             font-size: 16px;
-            border-radius: 2px;
+            border-radius: 25px;
             border: none;
             background-color: black;
             color: var(--button-color);
@@ -154,7 +156,7 @@
         .settings-menu button {
             padding: 10px 16px;
             font-size: 16px;
-            border-radius: 2px;
+            border-radius: 25px;
             border: 2px solid var(--border-color);
             background-color: black;
             color: var(--button-color);
@@ -232,13 +234,14 @@
             flex: 1;
             position: relative;
             background: url('https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BYhbSjKDtkvty6l0n/videoblocks-6567bc560e26b47183b158f4_rzfzr7ds6_thumbnail-1080_07.png') center/cover no-repeat;
-            order: 3; /* Move below both bars */
+            order: 3;
+            overflow: hidden;
         }
 
         .tabs-container {
             display: flex;
             background-color: black;
-            padding: 5px 5px 6px 5px;
+            padding: 5px 5px 0 5px;
             overflow-x: auto;
             white-space: nowrap;
             order: 1;
@@ -321,14 +324,23 @@
             height: 100%;
             border: none;
             display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
         }
 
         .browser-content iframe.active {
             display: block;
         }
 
-        .welcome-message {
+        .welcome-message, .loading-message {
             position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .welcome-message {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -341,7 +353,6 @@
         }
 
         .loading-message {
-            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -446,6 +457,7 @@
         <button onclick="showNewsPopup()">News</button>
         <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
         <button onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
+        <button onclick="window.open('https://guns.lol/xenic', '_blank')">guns.lol</button>
             </div>
         </div>
     </div>
@@ -459,8 +471,8 @@
     </div>
 
     <div class="browser-content">
-        <iframe id="browserFrame0" class="active" src="about:blank"></iframe>
-        <div id="welcomeMessage" class="welcome-message">Welc𝚘me T𝚘 Nebula</div>
+        <iframe id="browserFrame0" class="active" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+        <div id="welcomeMessage" class="welcome-message">Welcome To Nebula</div>
         <div id="loadingMessage" class="loading-message">Loading<span class="loading-dots"></span></div>
     </div>
     
@@ -480,7 +492,7 @@
                 <div style="color: white;" onclick="changeTheme('default')">Default</div>
                 <div style="color: red;" onclick="changeTheme('red')">Red</div>
                 <div style="color: orange;" onclick="changeTheme('orange')">Orange</div>
-                <div style="color: yellow;" onclick="changeTheme('yellow')">Yellow</div>
+                <div style="color: rgb(255, 255, 0);" onclick="changeTheme('yellow')">Yellow</div>
                 <div style="color: green;" onclick="changeTheme('green')">Green</div>
                 <div style="color: blue;" onclick="changeTheme('blue')">Blue</div>
                 <div style="color: purple;" onclick="changeTheme('purple')">Purple</div>
@@ -597,9 +609,13 @@
             
             showLoading();
             iframe.src = url;
+            iframe.style.pointerEvents = 'auto';
+            iframe.style.zIndex = '1';
             iframe.onload = () => {
                 updateTabTitle(iframe, activeTab);
                 hideLoading();
+                iframe.style.pointerEvents = 'auto';
+                iframe.style.zIndex = '1';
             };
             addToHistory(url);
             hideVisitorStats();
@@ -803,4 +819,3 @@
     
 </body>
 </html>
-<a href="//www.dmca.com/Protection/Status.aspx?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-11.png?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
