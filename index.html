@@ -33,9 +33,11 @@
             background-color: black;
             padding: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             order: 2;
+            position: relative;
         }
 
         .control-buttons {
@@ -43,65 +45,46 @@
             margin-right: 10px;
         }
 
-        .more-options-button {
-            padding: 10px 16px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: 2px solid var(--border-color);
-            background-color: black;
-            color: var(--button-color);
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            margin-left: 10px;
-            outline: none;
-            writing-mode: horizontal-tb;
-            text-orientation: mixed;
+        .quick-access-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
         }
 
-        .more-options-button:hover {
-            background-color: var(--button-color);
-            color: black;
-            transform: scale(1.1);
+        .quick-access-button {
+            background: none;
+            border: none;
+            color: var(--button-color);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            outline: none;
+        }
+
+        .quick-access-button:hover {
+            color: var(--button-color);
+            opacity: 0.8;
+        }
+
+        .bookmark-button {
+            background: none;
+            border: none;
+            color: var(--button-color);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 5px;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .bookmark-button:hover {
+            color: gold;
         }
 
         .more-options-dropdown {
             display: none;
-            position: absolute;
-            background-color: black;
-            min-width: 200px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1000;
-            border: 2px solid var(--border-color);
-            border-radius: 25px;
-            padding: 10px;
-            right: 10px;
-            top: 50px;
-        }
-
-        .more-options-dropdown button {
-            display: block;
-            width: 100%;
-            padding: 10px 16px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: none;
-            background-color: black;
-            color: var(--button-color);
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            margin-bottom: 5px;
-            text-align: left;
-        }
-
-        .more-options-dropdown button:hover {
-            background-color: var(--button-color);
-            color: black;
-            transform: scale(1.05);
-        }
-
-        .more-options-container {
-            position: relative;
-            display: inline-block;
         }
 
         .control-buttons button,
@@ -140,7 +123,7 @@
         }
 
         .settings-menu {
-            display: none;
+            visibility: hidden;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -150,9 +133,15 @@
             border-radius: 15px;
             text-align: center;
             z-index: 100;
-            width: 600px; /* Increased width */
-            height: 400px; /* Increased height */
+            width: 600px;
+            height: 400px;
         }
+
+        .settings-menu.active {
+            display: block;
+            opacity: 1;
+        }
+
         .settings-menu button {
             padding: 10px 16px;
             font-size: 16px;
@@ -170,7 +159,6 @@
             color: black;
             transform: scale(1.1);
         }
-
 
         .close-btn {
             position: absolute;
@@ -234,7 +222,8 @@
             flex: 1;
             position: relative;
             background: url('https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BYhbSjKDtkvty6l0n/videoblocks-6567bc560e26b47183b158f4_rzfzr7ds6_thumbnail-1080_07.png') center/cover no-repeat;
-            order: 3; /* Move below both bars */
+            order: 3;
+            display: flex;
         }
 
         .tabs-container {
@@ -373,13 +362,12 @@
         }
 
         .history-bar, .how-to-use-box, .version-popup {
-            background-color: black;
-            color: white;
-            display: none; /* Initially hidden */
+            visibility: hidden;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            background-color: black;
             padding: 20px;
             border-radius: 15px;
             z-index: 101;
@@ -388,19 +376,29 @@
             text-align: center;
         }
 
+        .how-to-use-box.active, .version-popup.active {
+            display: block;
+            opacity: 1;
+        }
+
         /* Bottom History Bar */
         .bottom-history-bar {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background-color: black;
             color: white;
             padding: 10px;
-            display: none; /* Initially hidden */
+            visibility: hidden;
             flex-direction: column;
             align-items: center;
             z-index: 110;
+        }
+
+        .bottom-history-bar.active {
+            display: flex;
+            transform: translateY(0);
         }
 
         .history-list {
@@ -423,6 +421,60 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        .bookmarks-sidebar {
+            position: relative;
+            width: 300px;
+            height: 100%;
+            background-color: black;
+            border-left: 2px solid var(--border-color);
+            z-index: 1;
+            visibility: hidden;
+            padding: 20px;
+            overflow-y: auto;
+            margin: 0;
+            padding-top: 60px;
+            flex-shrink: 0;
+        }
+
+        .bookmarks-sidebar.show {
+            visibility: visible;
+        }
+
+        .bookmarks-sidebar .close-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: none;
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .bookmarks-list {
+            margin-top: 0;
+        }
+
+        .bookmark-item {
+            padding: 10px;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            word-break: break-all;
+        }
+
+        .bookmark-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .bookmarks-sidebar.show,
+        .bottom-history-bar.show,
+        .settings-menu.show,
+        .how-to-use-box.show,
+        .version-popup.show {
+            visibility: visible;
         }
     </style>
 </head>
@@ -431,26 +483,27 @@
 
 
     <div class="browser-bar" id="browserBar">
-        <div class="control-buttons">
-            <button onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
-            <button onclick="goForward()"><i class="fas fa-arrow-right"></i></button>
-            <button onclick="reloadPage()"><i class="fas fa-sync-alt"></i></button>
-            <button class="fullscreen-button" onclick="toggleFullscreen()">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </button>
-        </div>
-        <input type="text" id="urlInput" placeholder="Enter URL" onkeydown="checkEnter(event)">
-        <div class="more-options-container">
-            <button class="more-options-button" onclick="toggleMoreOptions()">⋮</button>
-            <div class="more-options-dropdown" id="moreOptionsDropdown">
-        <button onclick="toggleHistory()">History</button>
-        <button onclick="toggleSettings()">Settings</button>
-        <button onclick="showHowToUse()">How to Use</button>
-        <button onclick="showNewsPopup()">News</button>
-        <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
-        <button onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
-        <button onclick="window.open('https://guns.lol/xenic', '_blank')">guns.lol</button>
+        <div style="display: flex; width: 100%; align-items: center;">
+            <div class="control-buttons">
+                <button onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button onclick="goForward()"><i class="fas fa-arrow-right"></i></button>
+                <button onclick="reloadPage()"><i class="fas fa-sync-alt"></i></button>
+                <button class="fullscreen-button" onclick="toggleFullscreen()">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </button>
             </div>
+            <button class="bookmark-button" onclick="toggleBookmark()">★</button>
+            <input type="text" id="urlInput" placeholder="Enter URL" onkeydown="checkEnter(event)">
+        </div>
+        <div class="quick-access-buttons">
+            <button class="quick-access-button" onclick="toggleHistory()">History</button>
+            <button class="quick-access-button" onclick="toggleBookmarks()">Bookmarked</button>
+            <button class="quick-access-button" onclick="toggleSettings()">Settings</button>
+            <button class="quick-access-button" onclick="showHowToUse()">How to Use</button>
+            <button class="quick-access-button" onclick="showNewsPopup()">News</button>
+            <button class="quick-access-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScdhJ5l1FBA2tcC0BEzpBfXLX6O2hPDj4x0DAINixvW44WUlQ/viewform', '_blank')">Support</button>
+            <button class="quick-access-button" onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
+            <button class="quick-access-button" onclick="window.open('https://guns.lol/xenic', '_blank')">guns.lol</button>
         </div>
     </div>
 
@@ -464,6 +517,10 @@
 
     <div class="browser-content">
         <iframe id="browserFrame0" class="active" src="about:blank"></iframe>
+        <div class="bookmarks-sidebar" id="bookmarksSidebar">
+            <button class="close-btn" onclick="toggleBookmarks()">X</button>
+            <div class="bookmarks-list" id="bookmarksList"></div>
+        </div>
         <div id="welcomeMessage" class="welcome-message">Welcome To Nebula</div>
         <div id="loadingMessage" class="loading-message">Loading<span class="loading-dots"></span></div>
     </div>
@@ -493,14 +550,9 @@
                 <div style="color: indigo;" onclick="changeTheme('indigo')">Indigo</div>
                 <div style="color: magenta;" onclick="changeTheme('magenta')">Magenta</div>
                 <div style="color: teal;" onclick="changeTheme('teal')">Teal</div>
-
-
             }
         </div>
         <button class="settings-button" onclick="openInNewTab()">Open in about:blank</button>
-
-
-
     </div>
 
     <!-- HOW TO USE POPUP -->
@@ -514,8 +566,13 @@
     <div class="version-popup" id="newsPopup">
         <button class="close-btn" onclick="closeNewsPopup()">X</button>
         <h2>News</h2>
-        <p>- Version 1.3.4 now out!</p>
-        <p>- Added more themes</p>
+        <p>- Version 1.4. now out!</p>
+        <p>- Added tabs</p>
+        <p>- Added a bookmark feature</p>
+        <p>- Added my guns.lol!</p>
+        <p>- Fixed the fullscreen button</p>
+        <p>- Moved the buttons to under the search bar as they were glitched in the dropdown</p>
+        <p>- Added a loading animation while the iframe is loading</p>
     </div>
 
     <script>
@@ -524,6 +581,7 @@
         let onlineUsers = 0;
         let todaysVisitors = 0;
         let tabCounter = 1; // Counter for new tab IDs
+        let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
         function updateVisitorStats() {
             document.getElementById("totalVisitors").innerText = totalVisitors;
@@ -561,10 +619,10 @@
 
         function toggleHistory() {
             const bottomHistoryBar = document.getElementById('bottomHistoryBar');
-            bottomHistoryBar.style.display = bottomHistoryBar.style.display === 'block' ? 'none' : 'block';
-            document.getElementById('moreOptionsDropdown').style.display = 'none';
-            updateHistoryList();
-            return false; // Prevent event propagation
+            bottomHistoryBar.classList.toggle('show');
+            if (bottomHistoryBar.classList.contains('show')) {
+                updateHistoryList();
+            }
         }
 
         function closeBottomHistoryBar() {
@@ -583,6 +641,7 @@
                 // Cross-origin error, use URL instead
                 tab.querySelector('.tab-title').textContent = iframe.src;
             }
+            updateBookmarkButton();
         }
 
         function showLoading() {
@@ -633,45 +692,39 @@
         }
 
         function toggleFullscreen() {
-            const elem = document.getElementById('browserFrame');
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            if (activeIframe.requestFullscreen) {
+                activeIframe.requestFullscreen();
+            } else if (activeIframe.webkitRequestFullscreen) {
+                activeIframe.webkitRequestFullscreen();
+            } else if (activeIframe.msRequestFullscreen) {
+                activeIframe.msRequestFullscreen();
             }
         }
 
         function toggleSettings() {
             const settingsMenu = document.getElementById('settingsMenu');
-            settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
-            document.getElementById('moreOptionsDropdown').style.display = 'none';
-            return false; // Prevent event propagation
+            settingsMenu.classList.toggle('show');
         }
 
         function showHowToUse() {
             const howToUseBox = document.getElementById('howToUseBox');
-            howToUseBox.style.display = 'block';
-            document.getElementById('moreOptionsDropdown').style.display = 'none';
-            return false; // Prevent event propagation
+            howToUseBox.classList.add('show');
         }
 
         function closeHowToUse() {
-            document.getElementById('howToUseBox').style.display = 'none';
-            return false; // Prevent event propagation
+            const howToUseBox = document.getElementById('howToUseBox');
+            howToUseBox.classList.remove('show');
         }
 
         function showNewsPopup() {
             const newsPopup = document.getElementById('newsPopup');
-            newsPopup.style.display = 'block';
-            document.getElementById('moreOptionsDropdown').style.display = 'none';
-            return false; // Prevent event propagation
+            newsPopup.classList.add('show');
         }
 
         function closeNewsPopup() {
-            document.getElementById('newsPopup').style.display = 'none';
-            return false; // Prevent event propagation
+            const newsPopup = document.getElementById('newsPopup');
+            newsPopup.classList.remove('show');
         }
 
         function changeTheme(color) {
@@ -698,18 +751,19 @@
         newWindow.document.close();
     }
 
-
         // Initialize visitor stats
         totalVisitors = 100; // Example number
         onlineUsers = 10; // Example number
         todaysVisitors = 20; // Example number
 
-        // Update stats on page load
+        // Initialize all menus to be hidden on page load
         window.onload = function() {
-            document.getElementById('howToUseBox').style.display = 'none';
-            document.getElementById('newsPopup').style.display = 'none';
-            document.getElementById('settingsMenu').style.display = 'none';
-            document.getElementById('bottomHistoryBar').style.display = 'none';
+            document.getElementById('howToUseBox').classList.remove('show');
+            document.getElementById('settingsMenu').classList.remove('show');
+            document.getElementById('bottomHistoryBar').classList.remove('show');
+            document.getElementById('bookmarksSidebar').classList.remove('show');
+            // Show news popup on load
+            document.getElementById('newsPopup').classList.add('show');
             updateVisitorStats();
         };
 
@@ -789,22 +843,57 @@
         // Initialize first tab
         document.querySelector('.tab').onclick = () => switchTab(0);
 
-        function toggleMoreOptions() {
-            const dropdown = document.getElementById('moreOptionsDropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        function toggleBookmark() {
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            const url = activeIframe.src;
+            
+            if (url && url !== 'about:blank') {
+                const index = bookmarks.indexOf(url);
+                if (index === -1) {
+                    bookmarks.push(url);
+                    document.querySelector('.bookmark-button').style.color = 'gold';
+                } else {
+                    bookmarks.splice(index, 1);
+                    document.querySelector('.bookmark-button').style.color = 'var(--button-color)';
+                }
+                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+                updateBookmarksList();
+            }
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('moreOptionsDropdown');
-            const moreOptionsButton = document.querySelector('.more-options-button');
-            
-            if (!moreOptionsButton.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.style.display = 'none';
+        function toggleBookmarks() {
+            const sidebar = document.getElementById('bookmarksSidebar');
+            sidebar.classList.toggle('show');
+            if (sidebar.classList.contains('show')) {
+                updateBookmarksList();
             }
-        });
+        }
+
+        function updateBookmarksList() {
+            const bookmarksList = document.getElementById('bookmarksList');
+            bookmarksList.innerHTML = '';
+            
+            bookmarks.forEach(url => {
+                const item = document.createElement('div');
+                item.className = 'bookmark-item';
+                item.textContent = url;
+                item.onclick = () => loadURL(url);
+                bookmarksList.appendChild(item);
+            });
+        }
+
+        function updateBookmarkButton() {
+            const activeIframe = document.querySelector('.browser-content iframe.active');
+            const url = activeIframe.src;
+            const bookmarkButton = document.querySelector('.bookmark-button');
+            
+            if (bookmarks.includes(url)) {
+                bookmarkButton.style.color = 'gold';
+            } else {
+                bookmarkButton.style.color = 'var(--button-color)';
+            }
+        }
     </script>
     
 </body>
 </html>
-<a href="//www.dmca.com/Protection/Status.aspx?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-11.png?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
