@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+created by Wizzi
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -234,8 +235,7 @@
             flex: 1;
             position: relative;
             background: url('https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/BYhbSjKDtkvty6l0n/videoblocks-6567bc560e26b47183b158f4_rzfzr7ds6_thumbnail-1080_07.png') center/cover no-repeat;
-            order: 3;
-            overflow: hidden;
+            order: 3; /* Move below both bars */
         }
 
         .tabs-container {
@@ -324,23 +324,15 @@
             height: 100%;
             border: none;
             display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 999;
+            pointer-events: auto;
         }
 
         .browser-content iframe.active {
             display: block;
         }
 
-        .welcome-message, .loading-message {
-            position: absolute;
-            z-index: 1;
-            pointer-events: none;
-        }
-
         .welcome-message {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -353,6 +345,7 @@
         }
 
         .loading-message {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -471,7 +464,7 @@
     </div>
 
     <div class="browser-content">
-        <iframe id="browserFrame0" class="active" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+        <iframe id="browserFrame0" class="active" src="about:blank"></iframe>
         <div id="welcomeMessage" class="welcome-message">Welcome To Nebula</div>
         <div id="loadingMessage" class="loading-message">Loading<span class="loading-dots"></span></div>
     </div>
@@ -492,7 +485,7 @@
                 <div style="color: white;" onclick="changeTheme('default')">Default</div>
                 <div style="color: red;" onclick="changeTheme('red')">Red</div>
                 <div style="color: orange;" onclick="changeTheme('orange')">Orange</div>
-                <div style="color: rgb(255, 255, 0);" onclick="changeTheme('yellow')">Yellow</div>
+                <div style="color: yellow;" onclick="changeTheme('yellow')">Yellow</div>
                 <div style="color: green;" onclick="changeTheme('green')">Green</div>
                 <div style="color: blue;" onclick="changeTheme('blue')">Blue</div>
                 <div style="color: purple;" onclick="changeTheme('purple')">Purple</div>
@@ -609,13 +602,9 @@
             
             showLoading();
             iframe.src = url;
-            iframe.style.pointerEvents = 'auto';
-            iframe.style.zIndex = '1';
             iframe.onload = () => {
                 updateTabTitle(iframe, activeTab);
                 hideLoading();
-                iframe.style.pointerEvents = 'auto';
-                iframe.style.zIndex = '1';
             };
             addToHistory(url);
             hideVisitorStats();
@@ -819,3 +808,4 @@
     
 </body>
 </html>
+<a href="//www.dmca.com/Protection/Status.aspx?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-11.png?ID=0f3e64c7-335e-43c1-a308-0a4c23ef535c"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
