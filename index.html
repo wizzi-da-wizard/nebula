@@ -735,8 +735,10 @@
     <div class="version-popup" id="newsPopup">
         <button class="close-btn" onclick="closeNewsPopup()">X</button>
         <h2>News</h2>
-        <p>- Version 1.5 now out!</p>
-        <p>- Added Nebula Chat</p>
+        <p>- Version 1.5.1 now out!</p>
+        <p>- Added censorship to the chat</p>
+        <p>- Added Nebula chat</p>
+
     </div>
 
     <!-- BOOKMARKS MENU -->
@@ -1091,6 +1093,26 @@
         let ws;
         let username = 'User' + Math.floor(Math.random() * 1000);
         
+        // Word filter
+        const badWords = [
+            'fuck', 'shit', 'bitch', 'ass', 'damn', 'hell', 'crap', 'dick', 'pussy', 'cock',
+            'nigger', 'nigga', 'n1gga', 'n1gger', 'fag', 'faggot', 'retard', 'retarded',
+            'whore', 'slut', 'cunt', 'bastard', 'motherfucker', 'dumbass',
+            'moron', 'twat', 'wanker', 'prick', 'arse', 'arsehole', 'bellend', 'bollocks',
+            'bullshit', 'cocksucker', 'dickhead', 'dipshit', 'douche', 'douchebag', 'dumbfuck',
+            'fuckface', 'fuckhead', 'fuckwit', 'jackass', 'piss', 'pissed', 'pissed off',
+            'shithead', 'shitty', 'twat', 'wanker', 'wank', 'wanky', 'wanky', 'wanky', 'wanky'
+        ];
+
+        function filterMessage(message) {
+            let filteredMessage = message;
+            badWords.forEach(word => {
+                const regex = new RegExp(word, 'gi');
+                filteredMessage = filteredMessage.replace(regex, '*'.repeat(word.length));
+            });
+            return filteredMessage;
+        }
+        
         function initializeWebSocket() {
             ws = new WebSocket('wss://hallowed-dented-rate.glitch.me/ws');
 
@@ -1156,10 +1178,11 @@
             const message = input.value.trim();
             
             if (message && ws && ws.readyState === WebSocket.OPEN) {
+                const filteredMessage = filterMessage(message);
                 ws.send(JSON.stringify({
                     type: 'message',
                     username: username,
-                    message: message
+                    message: filteredMessage
                 }));
                 input.value = '';
             }
