@@ -515,6 +515,119 @@
         .version-popup.show {
             visibility: visible;
         }
+
+        /* Chat System Styles */
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--button-color);
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 400px;
+            height: 500px;
+            background-color: black;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .chat-container.show {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 10px;
+            background-color: black;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--button-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header span:first-child {
+            margin-right: auto;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 8px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.received {
+            background-color: var(--button-color);
+            color: black;
+            align-self: flex-start;
+        }
+
+        .message.sent {
+            background-color: #444;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        .chat-input button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--button-color);
+            color: black;
+            cursor: pointer;
+        }
+
+        .online-users {
+            padding: 10px;
+            color: var(--button-color);
+            font-size: 12px;
+            text-align: center;
+            margin-right: 30px;
+        }
     </style>
 </head>
 <body>
@@ -545,7 +658,7 @@
             <button class="quick-access-button" onclick="window.open('https://cash.app/$Ot1m1')">CashApp</button>
             <button class="quick-access-button" onclick="window.open('https://guns.lol/xenic', '_blank')">guns.lol</button>
             <button class="quick-access-button" onclick="window.open('https://discord.gg/xHQwH48v', '_blank')">discord</button>
-
+            <button class="quick-access-button" onclick="toggleChat()">Chat</button>
         </div>
     </div>
 
@@ -564,6 +677,23 @@
         <div id="loadingMessage" class="loading-message">Loading<span class="loading-dots"></span></div>
     </div>
     
+    <!-- Chat System -->
+    <button class="chat-button" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </button>
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <span>Nebula Chat</span>
+            <span class="online-users" id="onlineUsersCount">Users Online: 0</span>
+            <button class="close-btn" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleMessageKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
     <!-- BOTTOM HISTORY BAR -->
     <div class="bottom-history-bar" id="bottomHistoryBar">
         <button class="close-btn" onclick="closeBottomHistoryBar()">X</button>
@@ -605,14 +735,8 @@
     <div class="version-popup" id="newsPopup">
         <button class="close-btn" onclick="closeNewsPopup()">X</button>
         <h2>News</h2>
-        <p>- Version 1.4 now out!</p>
-        <p>- Added tabs</p>
-        <p>- Added the new discord server</p>
-        <p>- Added a bookmark feature</p>
-        <p>- Added my guns.lol!</p>
-        <p>- Fixed the fullscreen button</p>
-        <p>- Moved the buttons to under the search bar as they were glitched in the dropdown</p>
-        <p>- Added a loading animation while the iframe is loading</p>
+        <p>- Version 1.5 now out!</p>
+        <p>- Added Nebula Chat</p>
     </div>
 
     <!-- BOOKMARKS MENU -->
@@ -961,6 +1085,94 @@
             } else {
                 bookmarkButton.style.color = 'var(--button-color)';
             }
+        }
+
+        // Chat System
+        let ws;
+        let username = 'User' + Math.floor(Math.random() * 1000);
+        
+        function initializeWebSocket() {
+            ws = new WebSocket('wss://hallowed-dented-rate.glitch.me/ws');
+
+            ws.onopen = () => {
+                console.log('Connected to chat server');
+                addSystemMessage('Connected to chat');
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'message') {
+                    addMessage(data.username, data.message, data.username === username);
+                } else if (data.type === 'users') {
+                    updateOnlineUsers(data.count);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from chat server');
+                addSystemMessage('Disconnected from chat. Reconnecting...');
+                setTimeout(initializeWebSocket, 3000);
+            };
+        }
+
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            const chatButton = document.querySelector('.chat-button');
+            
+            if (chatContainer.classList.contains('show')) {
+                chatContainer.classList.remove('show');
+                chatButton.style.display = 'flex';
+            } else {
+                chatContainer.classList.add('show');
+                chatButton.style.display = 'none';
+                if (!ws) {
+                    initializeWebSocket();
+                }
+            }
+        }
+
+        function addMessage(username, message, isSent) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isSent ? 'sent' : 'received'}`;
+            messageElement.textContent = `${isSent ? '' : username + ': '}${message}`;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addSystemMessage(message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message system';
+            messageElement.style.textAlign = 'center';
+            messageElement.style.color = '#666';
+            messageElement.textContent = message;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'message',
+                    username: username,
+                    message: message
+                }));
+                input.value = '';
+            }
+        }
+
+        function handleMessageKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function updateOnlineUsers(count) {
+            document.getElementById('onlineUsersCount').textContent = `Users Online: ${count}`;
         }
     </script>
     
